@@ -30,7 +30,7 @@ def root():
     )
 
 
-# # Filter: student_id
+# Filter: student_id
 @app.route("/student/<int:student_id>")
 def student_filter(student_id):
     list_of_student_answers = StudentAnswers.query.filter_by(
@@ -45,7 +45,7 @@ def student_filter(student_id):
     )
 
 
-# # Filter: module_id
+# Filter: module_id
 @app.route("/module/<int:module_id>")
 def module_filter(module_id):
     list_of_student_answers = StudentAnswers.query.filter_by(module_id=module_id).all()
@@ -57,7 +57,7 @@ def module_filter(module_id):
     )
 
 
-# # Filter: question_id
+# Filter: question_id
 @app.route("/question/<int:question_id>")
 def question_filter(question_id):
     list_of_student_answers = StudentAnswers.query.filter_by(
