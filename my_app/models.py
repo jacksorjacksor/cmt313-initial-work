@@ -14,9 +14,17 @@ class StudentAnswers(db.Model):
     correct_answer = db.Column(db.Boolean, default=False, nullable=False)
     marks = db.Column(db.Integer)
 
-    @hybrid_property
-    def actual_value(self):
-        if self.correct_answer:
-            return f"{self.marks}"
-        else:
-            return "0"
+    @property
+    def serialized(self):
+        """Return object data in serializeable format"""
+        return {
+            "id": self.id,
+            "student_id": self.student_id,
+            "timestamp": self.timestamp,
+            "module_id": self.module_id,
+            "assessment_id": self.assessment_id,
+            "question_id": self.question_id,
+            "answer_id": self.answer_id,
+            "correct_answer": self.correct_answer,
+            "marks": self.marks,
+        }

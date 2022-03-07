@@ -8,6 +8,7 @@
 	</head>
 	<body>
 		<h1>HI!!!!</h1>
+		<h2>Average Mark: {{average_mark}}</h2>
 		{% for answer in list_of_student_answers %}
 		<p>{{ answer.student_id }}|
 		{{ answer.timestamp.strftime('%Y-%m-%d') }}|
