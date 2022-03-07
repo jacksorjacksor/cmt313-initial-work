@@ -1,12 +1,11 @@
 # test case 1
 
-If you put in a dataset what results do you get?
+If you put in a dataset you should get the following results:
 
-You should get the following results:
-
-- correct averages
-- question filters
-- module filters
-- all calculations to be correct
-
-(should be able to export the following results)
+- view all data
+- average mark calculated
+- filters for:
+- - module
+- - question
+- - student
+- all data and calculations to be correct
