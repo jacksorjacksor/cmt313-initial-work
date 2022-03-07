@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<h1>HI!!!!</h1>
+		{% for answer in list_of_student_answers %}
+		<p>{{ answer.student_id }}|
+		{{ answer.timestamp.strftime('%Y-%m-%d') }}|
+		{{ answer.module_id }}|
+		{{ answer.assessment_id }}|
+		{{ answer.question_id }}|
+		{{ answer.answer_id }}|
+		{{ answer.correct_answer }}|
+		{{ answer.marks }} //\\ {{ answer.actual_value }} ?? </p>
+		
+		***</p>
+		{% endfor %}
+	</body>
+</html>
