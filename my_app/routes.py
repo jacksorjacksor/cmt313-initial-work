@@ -1,7 +1,8 @@
-from my_app import app
+from my_app import app, db
 from my_app.models import StudentAnswers
 from flask import render_template, redirect, url_for, jsonify
 import json
+from sqlalchemy.sql import func
 
 
 def average_mark_calc(list_of_student_answers):
@@ -20,6 +21,7 @@ def average_mark_calc(list_of_student_answers):
 # All entries
 @app.route("/")
 def root():
+
     list_of_student_answers = StudentAnswers.query.all()
     average_mark = average_mark_calc(list_of_student_answers)
 
@@ -36,6 +38,16 @@ def student_filter(student_id):
     list_of_student_answers = StudentAnswers.query.filter_by(
         student_id=student_id
     ).all()
+
+    # Gives the marks, NOT THE QUESTIONS - separate list of questions?
+    av_query = (
+        db.session.query(db.func.avg(StudentAnswers.marks))
+        .filter_by(student_id=student_id)
+        .group_by(StudentAnswers.question_id)
+        .all()
+    )
+
+    print(av_query)
 
     average_mark = average_mark_calc(list_of_student_answers)
     return render_template(
