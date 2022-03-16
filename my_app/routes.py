@@ -58,17 +58,10 @@ def course_view():
         student_id=student_id
     ).all()
 
-    # This creates a dictionary of dictionaries of tuples:
-    # {module1: {assessment1: (total_marks, possible_marks)}}
-    # ...
-    # and I hate it but it works so ¯\_(ツ)_/¯
-
     # Dictionary of dictionaries
     dictionary_of_modules_with_possible_marks = {}
     dictionary_of_modules_with_total_marks = {}
-    # Every module
-    # # Every assessment
-    # # # Every question
+
     list_of_all_modules_in_course = list(
         set([answer.module_id for answer in list_of_student_answers])
     )
@@ -124,16 +117,6 @@ def course_view():
         for key, value in dictionary_of_modules_with_possible_marks.items()
     }
 
-    # print(
-    #     f"dictionary_of_modules_with_total_marks : {dictionary_of_modules_with_total_marks}"
-    # )  # Sample output = {1: [{1: 52, 2: 8}], 2: [{1: 52}], 22: [{1: 52}]}
-    # print(
-    #     f"dictionary_of_modules_with_possible_marks : {dictionary_of_modules_with_possible_marks}"
-    # )  # Sample output = {1: [{1: 154, 2: 8}], 2: [{1: 154}], 22: [{1: 154}]}
-
-    # Make a dictionary of dictionaries of tuples
-    # Output: {module: {assessment: (total_marks, possible_marks)}}
-
     results_dict = {}
     for module_id, assessments in dictionary_of_modules_with_possible_marks.items():
         results_dict[module_id] = {}
@@ -144,7 +127,6 @@ def course_view():
             output_tuple = (total_marks, possible_marks)
             results_dict[module_id][assessment_id] = output_tuple
 
-    # course_total = ()
     total_marks = 0
     available_marks = 0
     module_totals = {}
@@ -154,8 +136,6 @@ def course_view():
             available_marks += marks_tuple[1]
         module_totals[module_id] = (total_marks, available_marks)
 
-    print(f"module_totals: {module_totals}")
-
     course_total_marks = 0
     course_available_marks = 0
 
@@ -164,7 +144,6 @@ def course_view():
         course_available_marks += results_tuple[1]
 
     final_results = (course_total_marks, course_available_marks)
-    print(f"final_results: {final_results}")
 
     # For testing - sending a class object to Jinja2? God I'm tired...
 
@@ -173,7 +152,6 @@ def course_view():
         final_results=final_results,  # (total_marks, possible_marks),
         module_totals=module_totals,  # {module: (total_marks, possible_marks)}
         results_dict=results_dict,  # {module: {assessment: (total_marks, possible_marks)}}
-        list_of_values=[0, 3, 2, 5, 4],
     )
 
 
@@ -188,14 +166,19 @@ def module_view(module_id):
         .all()
     )
 
-    # MAKE LIST OF ASSESSMENTS:
-    # > this would be from the module links, not necessarily what the student has done
-
     dictionary_of_possible_marks = {}
     dictionary_of_total_marks = {}
+    dictionary_of_modules_with_possible_marks = {}
+    dictionary_of_modules_with_total_marks = {}
 
     list_of_all_assessments_in_module = list(
-        set([answer.assessment_id for answer in list_of_student_answers])
+        set(
+            [
+                answer.assessment_id
+                for answer in list_of_student_answers
+                if answer.module_id == module_id
+            ]
+        )
     )
 
     # Make dictionary{question ID: possible marks}
@@ -218,15 +201,59 @@ def module_view(module_id):
             ]
         )
 
-    # Print statements
-    print(f"list_of_student_answers: {list_of_student_answers}")
-    print(f"dictionary_of_possible_marks: {dictionary_of_possible_marks}")
-    print(f"dictionary_of_total_marks: {dictionary_of_total_marks}")
+    dictionary_of_modules_with_possible_marks.setdefault(module_id, []).append(
+        dictionary_of_possible_marks
+    )
+
+    dictionary_of_modules_with_total_marks.setdefault(module_id, []).append(
+        dictionary_of_total_marks
+    )
+
+    # Get rid of nested list (shouldn't have been there anyway)
+    dictionary_of_modules_with_total_marks = {
+        key: value[0] for key, value in dictionary_of_modules_with_total_marks.items()
+    }
+
+    dictionary_of_modules_with_possible_marks = {
+        key: value[0]
+        for key, value in dictionary_of_modules_with_possible_marks.items()
+    }
+
+    results_dict = {}
+    for module_id, assessments in dictionary_of_modules_with_possible_marks.items():
+        results_dict[module_id] = {}
+        for assessment_id, possible_marks in assessments.items():
+            total_marks = dictionary_of_modules_with_total_marks[module_id][
+                assessment_id
+            ]
+            output_tuple = (total_marks, possible_marks)
+            results_dict[module_id][assessment_id] = output_tuple
+
+    total_marks = 0
+    available_marks = 0
+    module_totals = {}
+    for module_id, assessments_dict in results_dict.items():
+        for assessment, marks_tuple in assessments_dict.items():
+            total_marks += marks_tuple[0]
+            available_marks += marks_tuple[1]
+        module_totals[module_id] = (total_marks, available_marks)
+
+    course_total_marks = 0
+    course_available_marks = 0
+
+    for _, results_tuple in module_totals.items():
+        course_total_marks += results_tuple[0]
+        course_available_marks += results_tuple[1]
+
+    final_results = (course_total_marks, course_available_marks)
+
+    # For testing - sending a class object to Jinja2? God I'm tired...
 
     return render_template(
-        "index.html",
-        average_mark=0,
-        list_of_student_answers=list_of_student_answers,
+        "module_view.html",
+        final_results=final_results,  # (total_marks, possible_marks),
+        module_totals=module_totals,  # {module: (total_marks, possible_marks)}
+        results_dict=results_dict,  # {module: {assessment: (total_marks, possible_marks)}}
     )
 
 
