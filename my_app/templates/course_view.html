@@ -20,6 +20,15 @@
 			</p>
 		</div>
 
+		<div class="content-block">
+			<div
+				class="chart-container"
+				style="position: relative; height: 20vh; margin-bottom: 12rem"
+			>
+				<canvas id="myChart"></canvas>
+			</div>
+		</div>
+
 		{% for module, assessment_dict in results_dict.items() %}
 		<div class="content-block">
 			<a href="{{ url_for('module_view',module_id=module) }}">
@@ -52,5 +61,29 @@
 			{% endfor %}
 		</ul>
 		{% endfor %}
+
+		<script>
+			const correct = '{{final_results.0}}';
+			const incorrect = '{{final_results.1}}';
+
+			const ctx = document.getElementById('myChart').getContext('2d');
+			const myChart = new Chart(ctx, {
+				type: 'pie',
+				data: {
+					labels: ['Correct', 'Incorrect'],
+					datasets: [
+						{
+							label: 'My First Dataset',
+							data: [correct, incorrect],
+							backgroundColor: [
+								'rgb(54, 162, 235)',
+								'rgb(255, 99, 132)',
+							],
+							hoverOffset: 4,
+						},
+					],
+				},
+			});
+		</script>
 	</body>
 </html>
