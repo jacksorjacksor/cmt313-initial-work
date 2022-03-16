@@ -64,7 +64,7 @@
 
 		<script>
 			const correct = '{{final_results.0}}';
-			const incorrect = '{{final_results.1}}';
+			const incorrect = '{{final_results.1-final_results.0}}';
 
 			const ctx = document.getElementById('myChart').getContext('2d');
 			const myChart = new Chart(ctx, {
