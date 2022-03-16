@@ -33,16 +33,24 @@
 				endfor %}
 			</p>
 		</div>
-		{% for assessment, results_tuple in assessment_dict.items() %}
-		<div class="content-block">
-			<a href="{{ url_for('assessment_view',assessment_id=assessment) }}">
-				<h2>Assessment: {{ assessment }}</h2>
-			</a>
-			<p>
-				Total: {{results_tuple.0}} / {{results_tuple.1}} ({{ "%.2d" |
-				format((results_tuple.0/results_tuple.1)*100)}}%)
-			</p>
-		</div>
-		{% endfor %} {% endfor %}
+		<ul>
+			{% for assessment, results_tuple in assessment_dict.items() %}
+			<li>
+				<div class="content-block">
+					<a
+						href="{{ url_for('assessment_view',assessment_id=assessment) }}"
+					>
+						<h2>Assessment: {{ assessment }}</h2>
+					</a>
+					<p>
+						Total: {{results_tuple.0}} / {{results_tuple.1}} ({{
+						"%.2d" |
+						format((results_tuple.0/results_tuple.1)*100)}}%)
+					</p>
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+		{% endfor %}
 	</body>
 </html>
