@@ -58,7 +58,68 @@ def course_view():
         student_id=student_id
     ).all()
 
-    print(list_of_student_answers)
+    # This creates a dictionary of a list of dictionaries
+    # and I hate it but it works so ¯\_(ツ)_/¯
+
+    # This creates a dictionary, key = modules, value = list of dictionaries,  key = assignments, value = total marks
+
+    # Dictionary of dictionaries
+    dictionary_of_modules_with_possible_marks = {}
+    dictionary_of_modules_with_total_marks = {}
+    # Every module
+    # # Every assessment
+    # # # Every question
+    list_of_all_modules_in_course = list(
+        set([answer.module_id for answer in list_of_student_answers])
+    )
+
+    for module in list_of_all_modules_in_course:
+        dictionary_of_possible_marks = {}
+        dictionary_of_total_marks = {}
+
+        list_of_all_assessments_in_module = list(
+            set(
+                [
+                    answer.assessment_id
+                    for answer in list_of_student_answers
+                    if answer.module_id == module
+                ]
+            )
+        )
+
+        # Make dictionary{question ID: possible marks}
+        for assessment in list_of_all_assessments_in_module:
+            dictionary_of_possible_marks[assessment] = sum(
+                [
+                    answer.marks
+                    for answer in list_of_student_answers
+                    if answer.assessment_id == assessment
+                ]
+            )
+
+        # Make dictionary{question ID: actual marks}
+        for assessment in list_of_all_assessments_in_module:
+            dictionary_of_total_marks[assessment] = sum(
+                [
+                    answer.marks
+                    for answer in list_of_student_answers
+                    if answer.assessment_id == assessment and answer.correct_answer
+                ]
+            )
+
+        dictionary_of_modules_with_possible_marks.setdefault(module, []).append(
+            dictionary_of_possible_marks
+        )
+        dictionary_of_modules_with_total_marks.setdefault(module, []).append(
+            dictionary_of_total_marks
+        )
+
+    print(
+        f"dictionary_of_modules_with_total_marks : {dictionary_of_modules_with_total_marks}"
+    )
+    print(
+        f"dictionary_of_modules_with_possible_marks : {dictionary_of_modules_with_possible_marks}"
+    )
 
     return render_template(
         "index.html",
