@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<h1>COURSE VIEW</h1>
+		<p>Total so far: {{final_results.0}}/{{final_results.1}} ({{ "%.2d" | format((final_results.0/final_results.1)*100)}}%)</p>
+
+		{% for module, assessment_dict in results_dict.items() %}
+			<p>
+				<h1>Module: {{module}}</h1>
+				<p>Total so far:
+					{% for module_id, results_tuple in module_totals.items() %}
+						{% if module_id == module %}
+							{{results_tuple.0}}/{{results_tuple.1}} ({{ "%.2d" | format((results_tuple.0/results_tuple.1)*100)}}%)
+						{% endif %}
+						
+					{% endfor %}
+				</p>
+				{% for assessment, results_tuple in assessment_dict.items() %}
+					<h2>Assessment: {{ assessment }}</h2>
+					<p>{{results_tuple.0}} / {{results_tuple.1}} ({{ "%.2d" | format((results_tuple.0/results_tuple.1)*100)}}%)</p>
+
+				{% endfor %}
+			</p>
+		{% endfor %}
+
+	</body>
+</html>
