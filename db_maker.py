@@ -11,28 +11,28 @@ value1 = StudentAnswers(
     question_id=1,
     answer_id=1,
     correct_answer=True,
-    marks=1,
+    marks=4,
 )
 value2 = StudentAnswers(
     student_id=1,
-    module_id=1,
+    module_id=2,
     assessment_id=1,
-    question_id=2,
+    question_id=1,
     answer_id=1,
     correct_answer=False,
     marks=2,
 )
 value3 = StudentAnswers(
     student_id=1,
-    module_id=1,
-    assessment_id=1,
-    question_id=4,
+    module_id=2,
+    assessment_id=2,
+    question_id=2,
     answer_id=1,
     correct_answer=True,
     marks=3,
 )
 value4 = StudentAnswers(
-    student_id=1,
+    student_id=2,
     module_id=1,
     assessment_id=2,
     question_id=1,
