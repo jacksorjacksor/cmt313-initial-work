@@ -116,15 +116,18 @@ def course_view():
 
     print(
         f"dictionary_of_modules_with_total_marks : {dictionary_of_modules_with_total_marks}"
-    )
+    )  # Sample output = {1: [{1: 52, 2: 8}], 2: [{1: 52}], 22: [{1: 52}]}
     print(
         f"dictionary_of_modules_with_possible_marks : {dictionary_of_modules_with_possible_marks}"
-    )
+    )  # Sample output = {1: [{1: 154, 2: 8}], 2: [{1: 154}], 22: [{1: 154}]}
+
+    # For testing - sending a class object to Jinja2? God I'm tired...
 
     return render_template(
-        "index.html",
-        average_mark=0,
+        "course_view.j2",
         list_of_student_answers=list_of_student_answers,
+        dictionary_of_modules_with_total_marks=dictionary_of_modules_with_total_marks,
+        dictionary_of_modules_with_possible_marks=dictionary_of_modules_with_possible_marks,
     )
 
 
