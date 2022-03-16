@@ -173,6 +173,7 @@ def course_view():
         final_results=final_results,  # (total_marks, possible_marks),
         module_totals=module_totals,  # {module: (total_marks, possible_marks)}
         results_dict=results_dict,  # {module: {assessment: (total_marks, possible_marks)}}
+        list_of_values=[0, 3, 2, 5, 4],
     )
 
 
