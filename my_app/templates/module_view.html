@@ -12,11 +12,11 @@
 		/>
 	</head>
 	<body>
+		<h1>
+			<a href="{{ url_for('course_view') }}">COURSE VIEW</a> > MODULE VIEW
+		</h1>
 		<div class="content-block">
-			<h1>
-				<a href="{{ url_for('course_view') }}">COURSE VIEW</a> > MODULE
-				VIEW
-			</h1>
+			<h2>Module {{ module_id }}</h2>
 			<p>
 				Total: {{final_results.0}}/{{final_results.1}} ({{ "%.2d" |
 				format((final_results.0/final_results.1)*100)}}%)

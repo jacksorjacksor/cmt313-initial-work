@@ -251,6 +251,7 @@ def module_view(module_id):
 
     return render_template(
         "module_view.html",
+        module_id=module_id,
         final_results=final_results,  # (total_marks, possible_marks),
         module_totals=module_totals,  # {module: (total_marks, possible_marks)}
         results_dict=results_dict,  # {module: {assessment: (total_marks, possible_marks)}}
