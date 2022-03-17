@@ -16,8 +16,8 @@
 		<div class="content-block">
 			<h2>Course: 1</h2>
 			<p>
-				Total: {{final_results.0}}/{{final_results.1}} ({{ "%.2d" |
-				format((final_results.0/final_results.1)*100)}}%)
+				Total: {{course_marks.0}}/{{course_marks.1}} ({{ "%.2d" |
+				format((course_marks.0/course_marks.1)*100)}}%)
 			</p>
 		</div>
 
@@ -30,42 +30,22 @@
 			</div>
 		</div>
 
-		{% for module, assessment_dict in results_dict.items() %}
+		{% for module, mark_tuple in dictionary_of_module_marks.items() %}
 		<div class="content-block">
 			<a href="{{ url_for('module_view',module_id=module) }}">
 				<h1>Module: {{module}}</h1>
 			</a>
 			<p>
-				Total: {% for module_id, results_tuple in module_totals.items()
-				%} {% if module_id == module %}
-				{{results_tuple.0}}/{{results_tuple.1}} ({{ "%.2d" |
-				format((results_tuple.0/results_tuple.1)*100)}}%) {% endif %} {%
-				endfor %}
+				Total: {{mark_tuple.0}}/{{mark_tuple.1}} ({{ "%.2d" |
+				format((mark_tuple.0/mark_tuple.1)*100)}}%)
 			</p>
 		</div>
-		<ul>
-			{% for assessment, results_tuple in assessment_dict.items() %}
-			<li>
-				<div class="content-block">
-					<a
-						href="{{ url_for('assessment_view',assessment_id=assessment) }}"
-					>
-						<h2>Assessment: {{ assessment }}</h2>
-					</a>
-					<p>
-						Total: {{results_tuple.0}} / {{results_tuple.1}} ({{
-						"%.2d" |
-						format((results_tuple.0/results_tuple.1)*100)}}%)
-					</p>
-				</div>
-			</li>
-			{% endfor %}
-		</ul>
+
 		{% endfor %}
 
 		<script>
-			const correct = '{{final_results.0}}';
-			const incorrect = '{{final_results.1-final_results.0}}';
+			const correct = '{{course_marks.0}}';
+			const incorrect = '{{course_marks.1-course_marks.0}}';
 
 			const ctx = document.getElementById('myChart').getContext('2d');
 			const myChart = new Chart(ctx, {
@@ -74,7 +54,7 @@
 					labels: ['Correct', 'Incorrect'],
 					datasets: [
 						{
-							label: 'My First Dataset',
+							label: 'Course View',
 							data: [correct, incorrect],
 							backgroundColor: [
 								'rgb(54, 162, 235)',
