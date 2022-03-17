@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Student - Course View</title>
+		<title>Student - Assessment View</title>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 		<link
 			rel="stylesheet"
@@ -12,8 +12,14 @@
 		/>
 	</head>
 	<body>
-		<h1>COURSE VIEW</h1>
-		<h2>Course: 1</h2>
+		<h1>
+			<a href="{{ url_for('course_view') }}">COURSE VIEW</a> >
+			<a href="{{ url_for('module_view',module_id=module_id) }}"
+				>MODULE VIEW</a
+			>
+			> ASSESSMENT VIEW
+		</h1>
+		<h2>Assessment: {{assessment_id}}</h2>
 		<p>
 			Total: {{headline_marks.0}}/{{headline_marks.1}} ({{ "%.2d" |
 			format((headline_marks.0/headline_marks.1)*100)}}%)
@@ -28,11 +34,9 @@
 			</div>
 		</div>
 
-		{% for module, mark_tuple in dictionary_of_marks.items() %}
+		{% for question, mark_tuple in dictionary_of_marks.items() %}
 		<div class="content-block">
-			<a href="{{ url_for('module_view',module_id=module) }}">
-				<h1>Module: {{module}}</h1>
-			</a>
+			<h1>Question: {{question}}</h1>
 			<p>
 				Total: {{mark_tuple.0}}/{{mark_tuple.1}} ({{ "%.2d" |
 				format((mark_tuple.0/mark_tuple.1)*100)}}%)
@@ -40,6 +44,9 @@
 		</div>
 
 		{% endfor %}
+		<a href="https://www.youtube.com/watch?v=eqI8gtiN52k" target="_blank"
+			>Export data</a
+		>
 
 		<script>
 			const correct = '{{headline_marks.0}}';
@@ -52,7 +59,7 @@
 					labels: ['Correct', 'Incorrect'],
 					datasets: [
 						{
-							label: 'Course View',
+							label: 'Assessment View',
 							data: [correct, incorrect],
 							backgroundColor: [
 								'rgb(54, 162, 235)',

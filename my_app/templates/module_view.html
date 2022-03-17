@@ -4,7 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Student - Course View</title>
+		<title>Student - Module View</title>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
 		<link
 			rel="stylesheet"
@@ -15,13 +15,11 @@
 		<h1>
 			<a href="{{ url_for('course_view') }}">COURSE VIEW</a> > MODULE VIEW
 		</h1>
-		<div class="content-block">
-			<h2>Module {{ module_id }}</h2>
-			<p>
-				Total: {{final_results.0}}/{{final_results.1}} ({{ "%.2d" |
-				format((final_results.0/final_results.1)*100)}}%)
-			</p>
-		</div>
+		<h2>Module: {{module_id}}</h2>
+		<p>
+			Total: {{headline_marks.0}}/{{headline_marks.1}} ({{ "%.2d" |
+			format((headline_marks.0/headline_marks.1)*100)}}%)
+		</p>
 
 		<div class="content-block">
 			<div
@@ -32,42 +30,24 @@
 			</div>
 		</div>
 
-		{% for module, assessment_dict in results_dict.items() %}
+		{% for assessment, mark_tuple in dictionary_of_marks.items() %}
 		<div class="content-block">
-			<a href="{{ url_for('module_view',module_id=module) }}">
-				<h1>Module: {{module}}</h1>
+			<a
+				href="{{ url_for('assessment_view',assessment_id=assessment, module_id=module_id) }}"
+			>
+				<h1>Assessment: {{assessment}}</h1>
 			</a>
 			<p>
-				Total: {% for module_id, results_tuple in module_totals.items()
-				%} {% if module_id == module %}
-				{{results_tuple.0}}/{{results_tuple.1}} ({{ "%.2d" |
-				format((results_tuple.0/results_tuple.1)*100)}}%) {% endif %} {%
-				endfor %}
+				Total: {{mark_tuple.0}}/{{mark_tuple.1}} ({{ "%.2d" |
+				format((mark_tuple.0/mark_tuple.1)*100)}}%)
 			</p>
 		</div>
-		<ul>
-			{% for assessment, results_tuple in assessment_dict.items() %}
-			<li>
-				<div class="content-block">
-					<a
-						href="{{ url_for('assessment_view',assessment_id=assessment) }}"
-					>
-						<h2>Assessment: {{ assessment }}</h2>
-					</a>
-					<p>
-						Total: {{results_tuple.0}} / {{results_tuple.1}} ({{
-						"%.2d" |
-						format((results_tuple.0/results_tuple.1)*100)}}%)
-					</p>
-				</div>
-			</li>
-			{% endfor %}
-		</ul>
+
 		{% endfor %}
 
 		<script>
-			const correct = '{{final_results.0}}';
-			const incorrect = '{{final_results.1-final_results.0}}';
+			const correct = '{{headline_marks.0}}';
+			const incorrect = '{{headline_marks.1-headline_marks.0}}';
 
 			const ctx = document.getElementById('myChart').getContext('2d');
 			const myChart = new Chart(ctx, {
@@ -76,7 +56,7 @@
 					labels: ['Correct', 'Incorrect'],
 					datasets: [
 						{
-							label: 'My First Dataset',
+							label: 'Module View',
 							data: [correct, incorrect],
 							backgroundColor: [
 								'rgb(54, 162, 235)',
